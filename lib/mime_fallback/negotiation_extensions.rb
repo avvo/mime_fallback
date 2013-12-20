@@ -8,7 +8,6 @@ module MimeFallback
 
     # Override to support mime type fallbacks
     def negotiate_mime_with_fallback(order)
-      puts "in negotiate_mime"
       formats.each do |priority|
         if priority == Mime::ALL
           return order.first
