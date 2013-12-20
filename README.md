@@ -1,4 +1,4 @@
-# MimeFallback
+# MimeFallback [![Build Status](https://travis-ci.org/avvo/mime_fallback.png)](https://travis-ci.org/avvo/mime_fallback)
 
 Fix mime-type fallbacks when searching view paths.
 
