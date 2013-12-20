@@ -7,11 +7,11 @@ require "mime_fallback/version"
 Gem::Specification.new do |s|
   s.name        = "mime_fallback"
   s.version     = MimeFallback::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of MimeFallback."
-  s.description = "TODO: Description of MimeFallback."
+  s.authors     = ["Jeff Ching"]
+  s.email       = ["ching.jeff@gmail.com"]
+  s.homepage    = "http://github.com/avvo/mime_fallback"
+  s.summary     = "Format fallbacks for rendering partials"
+  s.description = "Format fallbacks for rendering partials"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
