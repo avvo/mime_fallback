@@ -4,6 +4,8 @@ module MimeFallback # :nodoc:
   FALLBACKS = {}
 
   class Type < ::Mime::Type
+    @register_callbacks = []
+    
     class << self
       def register_alias(string, symbol, extension_synonyms = [], fallbacks = [])
         FALLBACKS[symbol.to_s] = Array(fallbacks).map {|s| Mime::Type.lookup_by_extension(s.to_s) } unless Array(fallbacks).empty?
