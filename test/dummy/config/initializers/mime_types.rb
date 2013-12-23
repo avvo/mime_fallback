@@ -5,6 +5,7 @@
 # Mime::Type.register_alias "text/html", :iphone
 
 MimeFallback::Type.register_alias "text/html", :mobile, [], :html
+MimeFallback::Type.register_alias "application/json", :mobilejson, [], [:json, :js, :mobile, :html]
 
 # Rails doesn't handle wildcard mime types, so we need to hardcode
 # this as an alias to html so we don't 404.
