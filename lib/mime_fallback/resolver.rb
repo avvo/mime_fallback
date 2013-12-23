@@ -8,7 +8,7 @@ module MimeFallback
       fallbacks ||= MimeFallback::Type.fallbacks(format).dup
       if fallbacks.present?
         fallback_details = details.dup
-        fallback_details[:formats] = Array(format.to_s) + fallbacks.map(&:to_sym)
+        fallback_details[:formats] = Array(format.to_sym) + fallbacks.map(&:to_sym)
         path = build_path(name, prefix, partial)
         query(path, fallback_details.select {|key| EXTENSIONS.include?(key)}, fallback_details[:formats])
       else
