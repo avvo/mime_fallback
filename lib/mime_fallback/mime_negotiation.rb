@@ -7,7 +7,6 @@ module ActionDispatch
 
       # Override to support mime type fallbacks
       def negotiate_mime(order)
-        puts "negotiate_mime"
         formats.each do |priority|
           if priority == Mime::ALL
             return order.first
