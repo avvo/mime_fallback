@@ -16,4 +16,12 @@ class MimeTypeFallbackTest < ActionDispatch::IntegrationTest
     assert_equal "mobilejson", resp["format"]
     assert_equal "application/json", resp["string"]
   end
+
+  def test_respond_to_mobile_only
+    get "/test/mobile_only.mobile"
+    assert_response :success
+
+    get "/test/mobile_only.html"
+    assert_response 406
+  end
 end
