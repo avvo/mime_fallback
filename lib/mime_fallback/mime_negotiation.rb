@@ -7,22 +7,22 @@ module ActionDispatch
 
       # Override to support mime type fallbacks
       def negotiate_mime(order)
+        # make search easier later
+        responding_formats = order.index_by(&:to_sym)
+
+        # formats are the request's formats
         formats.each do |priority|
-          if priority == Mime::ALL
-            return order.first
-          else
-            # Try to find an exact match to what we're responding to
-            types = Array(priority) + MimeFallback::Type.fallbacks(priority.to_sym)
-            types.each do |fallback|
-              return fallback if order.map(&:to_sym).include?(fallback.to_sym)
-            end
-            
-            if order.include?(priority)
-              return priority
-            end
-          end
+          return order.first if priority == Mime::ALL
+
+          # Try to find an exact match to what we're responding to
+          types = Array(priority) + MimeFallback::Type.fallbacks(priority.to_sym)
+          fallback = types.detect{|type| responding_formats.has_key?(type.to_sym)}
+          return fallback if fallback
+
+          # we've found an exact match
+          return priority if responding_formats.has_key?(priority.to_sym)
         end
-        
+
         order.include?(Mime::ALL) ? formats.first : nil
       end
     end
