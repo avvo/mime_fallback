@@ -21,8 +21,14 @@ class RespondsTest < ActionDispatch::IntegrationTest
     get "/test/mobile_only.mobile"
     assert_response :success
 
-    assert_raises ActionController::UnknownFormat do
+    case Rails::VERSION::MAJOR
+    when 3
       get "/test/mobile_only.html"
+      assert_response 406
+    else
+      assert_raises ActionController::UnknownFormat do
+        get "/test/mobile_only.html"
+      end
     end
   end
 
