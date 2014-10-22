@@ -15,4 +15,10 @@ class TestController < ApplicationController
     end
   end
 
+  def html_only
+    respond_to do |format|
+      format.html
+    end
+  end
+
 end

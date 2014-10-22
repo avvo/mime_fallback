@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MimeTypeFallbackTest < ActionDispatch::IntegrationTest
+class RespondsTest < ActionDispatch::IntegrationTest
   def test_respond_to_basic
     get "/test/responding.json"
     assert_response :success
@@ -21,7 +21,23 @@ class MimeTypeFallbackTest < ActionDispatch::IntegrationTest
     get "/test/mobile_only.mobile"
     assert_response :success
 
-    get "/test/mobile_only.html"
-    assert_response 406
+    case Rails::VERSION::MAJOR
+    when 3
+      get "/test/mobile_only.html"
+      assert_response 406
+    else
+      assert_raises ActionController::UnknownFormat do
+        get "/test/mobile_only.html"
+      end
+    end
+  end
+
+  def test_respond_to_html_only_with_mobile_request
+    get "/test/html_only.html"
+    assert_response :success
+
+    # mobile is a more specific type of html, fallback
+    get "/test/html_only.mobile"
+    assert_response :success
   end
 end
