@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  test:
+    working_directory: /root/mime_fallback
+    docker:
+      - image: ruby:2.2.7
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - mime_fallback-{{ .Branch }}
+            - mime_fallback-master
+      - run:
+          name: Install Ruby Dependencies
+          command: bundle check --path=~/bundle || bundle install --path=~/bundle --jobs=4 --retry=3 --local
+      - run:
+          name: Run Tests
+          command: bundle exec rake test
+      - save_cache:
+          key: mime_fallback-{{ .Branch }}
+          paths:
+            - ~/bundle
+  build:
+    docker:
+      - image: ruby:2.2.7
+    steps:
+      - run: bundle config packagecloud.io $PACKAGECLOUD_READ_TOKEN
+      - run: gem install package_cloud
+      - checkout
+      - run: bundle install
+      # Clean up .gem files from all previous builds
+      - run: rm -f *.gem
+      - run: gem build $(ls *.gemspec)
+      - run: package_cloud push avvo/gems $(ls *.gem)
+
+workflows:
+  version: 2
+  build-workflow:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+          context: org-global
+      - build:
+          requires:
+          - test
+          context: org-global
+          filters:
+            tags:
+              only: /v[0-9]+\.[0-9]+\.[0-9]+.*/
+            branches:
+              ignore: /.*/
